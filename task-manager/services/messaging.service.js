@@ -23,6 +23,10 @@ process.on('exit', (code) => {
 })
 
 const publishToQueue = async (queueName, data) => {
+    if (!channel) {
+        return "rabbitmq connection not establish. try again."
+    }
+
     channel.assertQueue(queueName, {
         durable: true
     })

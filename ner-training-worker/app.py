@@ -21,7 +21,7 @@ logger.info('Waiting for messages. To exit press CTRL+C')
 def listenerCallback(ch, method, props, body):
     logger.info("Received message")
     
-    train_data(body)
+    train_data(body.decode())
     
     ch.basic_ack(delivery_tag=method.delivery_tag)
     logger.info("Acknowledged Message")

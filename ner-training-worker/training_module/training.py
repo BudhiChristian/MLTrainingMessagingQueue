@@ -1,2 +1,2 @@
-def train(data):
+def train(inputs, outputs, labels):
     pass

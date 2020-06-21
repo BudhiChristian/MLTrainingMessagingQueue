@@ -7,7 +7,8 @@ logger = logging.getLogger(__name__)
 
 def train_data(data):
     logger.info("Preparing Data")
-    training_data = prepare_training_data(data)
+    inputs, outputs, labels = prepare_training_data(data)
+    logger.info("Labels: {}".format(labels))
     logger.info("Training Model")
-    train(train_data)
+    train(inputs, outputs, labels)
     logger.info("Training Complete")

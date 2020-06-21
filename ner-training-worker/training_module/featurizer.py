@@ -4,4 +4,4 @@ class Featurizer():
         pass
     def featurize(self, sentence):
         # featurize sentence
-        pass
+        return sentence

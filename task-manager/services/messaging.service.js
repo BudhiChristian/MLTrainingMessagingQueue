@@ -4,7 +4,7 @@ var amqp = require('amqplib/callback_api')
 console.log("connecting to rabbitmq")
 var channel = null;
 
-amqp.connect(environment.messagingUrl, (err, connection) => {
+amqp.connect(environment.messagingConfigurations.messagingUrl, (err, connection) => {
     if(err) {
         throw err;
     }

@@ -7,7 +7,7 @@ var publishToQueue = require('../../services/messaging.service').publishToQueue
 var upload = multer()
 router.post('/', upload.single('file'), async (req, res, next) => {
     try {
-        let message = await publishToQueue(environment.crfTrainingQueue, req.file.buffer)
+        let message = await publishToQueue(environment.messagingConfigurations.crfTrainingQueue, req.file.buffer)
         res.status(200).send({
             message: message
         });

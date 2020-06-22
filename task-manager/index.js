@@ -1,8 +1,10 @@
+var environment = require('./environments/environment')
+
 var express = require('express');
 var app = express();
 
-const port = 3000;
-const host = '0.0.0.0';
+const host = environment.runConfigurations.host;
+const port = environment.runConfigurations.port;
 
 app.use('/crf-ner', require('./models/crf-training'));
 

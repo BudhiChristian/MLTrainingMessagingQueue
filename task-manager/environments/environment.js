@@ -4,7 +4,7 @@ const environment = {
         port: 3000
     },
     messagingConfigurations: {
-        messagingUrl: "amqp://0.0.0.0",
+        messagingUrl: `amqp://${process.env.RABBITMQ_HOST || '0.0.0.0'}`,
         crfTrainingQueue: "crf_training_queue"
     }
 };

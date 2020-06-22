@@ -16,7 +16,7 @@ def train(inputs, outputs, labels):
     logging.info("fitting model")
     model.fit(inputs, outputs)
 
-    logging.info("validating mode")
+    logging.info("validating model")
     labels.remove('O')
     y_pred = model.predict(inputs)
     flat_f1_score = metrics.flat_f1_score(outputs, y_pred, average='weighted', labels=labels)
@@ -24,6 +24,6 @@ def train(inputs, outputs, labels):
     validation = metrics.flat_classification_report(
         outputs, y_pred, labels=labels, digits=4
     )
-    logger.info(validation)
+    logger.info('\n'+validation)
     # TODO model save
     

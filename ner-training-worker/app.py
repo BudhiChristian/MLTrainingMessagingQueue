@@ -10,23 +10,27 @@ with open('./logging/log.config.yml', 'r') as log_config_file:
     logging.config.dictConfig(log_config)
 logger = logging.getLogger(__name__)
 
-connection = pika.BlockingConnection(
-    pika.ConnectionParameters(host='localhost')
+connection_params = pika.ConnectionParameters(
+    host='localhost',
+    blocked_connection_timeout=3600,
+    heartbeat=3600
 )
-channel = connection.channel()
 
-channel.queue_declare(queue='crf_training_queue', durable=True)
-logger.info('Waiting for messages. To exit press CTRL+C')
+with pika.BlockingConnection( connection_params ) as connection:
+    channel = connection.channel()
 
-def listenerCallback(ch, method, props, body):
-    logger.info("Received message")
-    
-    train_data(body.decode())
-    
-    ch.basic_ack(delivery_tag=method.delivery_tag)
-    logger.info("Acknowledged Message")
+    channel.queue_declare(queue='crf_training_queue', durable=True)
+    logger.info('Waiting for messages. To exit press CTRL+C')
 
-channel.basic_qos(prefetch_count=1)
-channel.basic_consume(queue='crf_training_queue', on_message_callback=listenerCallback)
+    def listenerCallback(ch, method, props, body):
+        logger.info("Received message")
+        
+        train_data(body.decode())
+        
+        ch.basic_ack(delivery_tag=method.delivery_tag)
+        logger.info("Acknowledged Message")
 
-channel.start_consuming()
+    channel.basic_qos(prefetch_count=1)
+    channel.basic_consume(queue='crf_training_queue', on_message_callback=listenerCallback)
+
+    channel.start_consuming()

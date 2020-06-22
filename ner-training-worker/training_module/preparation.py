@@ -8,10 +8,10 @@ logger = logging.getLogger(__name__)
 
 def prepare_training_data(data):
     logger.info("buidling list of list generator")
-    data_generator = read_csv(data)
+    data_generator = __read_csv(data)
 
     logger.info("building parsed data generator")
-    sentence_generator = parse_sentences(data_generator)
+    sentence_generator = __parse_sentences(data_generator)
 
     logger.info("featurizing data and pulling labels")
     inputs = list()
@@ -24,13 +24,13 @@ def prepare_training_data(data):
     return inputs, outputs, sorted(labels)
 
 
-def read_csv(data):
+def __read_csv(data):
     f = StringIO(data)
     reader = csv.reader(f, delimiter=',')
     for row in reader:
         yield row
 
-def parse_sentences(data):
+def __parse_sentences(data):
     sentence = None
     skip_header = True
     for entry in data:

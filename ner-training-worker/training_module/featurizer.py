@@ -13,31 +13,31 @@ class Featurizer():
         parts_of_speech = nltk.pos_tag(sentence)
         featured_data = list()
         for idx, (word, pos) in enumerate(parts_of_speech):
-            features = self.featurize_word(word, pos)
+            features = self.__featurize_word(word, pos)
             features.update({
                 'lower': word.lower(),
-                'lemma': self.lemmatize(word, pos),
+                'lemma': self.__lemmatize(word, pos),
                 'prefix': word[:3],
                 'suffix': word[-4:],
                 'pos_simple': pos[:2],
                 'BOS': idx == 0,
                 'EOS': idx == len(sentence)-1
             })
-            features.update(self.featurize_word(*(parts_of_speech[idx-2] if idx > 1 else ('','')), prefix='-2:'))
-            features.update(self.featurize_word(*(parts_of_speech[idx-1] if idx > 0 else ('','')), prefix='-1:'))
-            features.update(self.featurize_word(*(parts_of_speech[idx+1] if idx < len(sentence)-1 else ('','')), prefix='+1:'))
-            features.update(self.featurize_word(*(parts_of_speech[idx-2] if idx < len(sentence)-2 else ('','')), prefix='+2:'))
+            features.update(self.__featurize_word(*(parts_of_speech[idx-2] if idx > 1 else ('','')), prefix='-2:'))
+            features.update(self.__featurize_word(*(parts_of_speech[idx-1] if idx > 0 else ('','')), prefix='-1:'))
+            features.update(self.__featurize_word(*(parts_of_speech[idx+1] if idx < len(sentence)-1 else ('','')), prefix='+1:'))
+            features.update(self.__featurize_word(*(parts_of_speech[idx-2] if idx < len(sentence)-2 else ('','')), prefix='+2:'))
 
             featured_data.append(features)
         return featured_data
 
-    def featurize_word(self, word, pos, prefix='') -> dict:
+    def __featurize_word(self, word, pos, prefix='') -> dict:
         return {
             '{}word'.format(prefix): word,
             '{}pos'.format(prefix): pos
         }
 
-    def lemmatize(self, word, pos: str):
+    def __lemmatize(self, word, pos: str):
         wn_pos = ''
         if pos.startswith('J'):
             wn_pos = wordnet.ADJ

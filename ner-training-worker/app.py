@@ -2,7 +2,7 @@ import yaml
 import logging
 import logging.config
 
-from training_module.main import train_data
+from training_module import TrainingJob
 from messaging_module import Messenger
 
 with open('./config.yml', 'r') as config_file:
@@ -13,5 +13,7 @@ with open('./logging/log.config.yml', 'r') as log_config_file:
     logging.config.dictConfig(log_config)
 logger = logging.getLogger(__name__)
 
+training_job = TrainingJob(config['trainingConfiguration'])
 messenger = Messenger(config['messagingConfiguration'])
-messenger.start(train_data)
+
+messenger.start(callback=training_job.execute)

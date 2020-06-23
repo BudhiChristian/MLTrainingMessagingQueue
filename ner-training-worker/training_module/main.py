@@ -3,12 +3,17 @@ from .training import train
 
 import logging
 
-logger = logging.getLogger(__name__)
+class TrainingJob():
+    def __init__(self, config):
+        self.logger = logging.getLogger(__name__)
 
-def train_data(data):
-    logger.info("Preparing Data")
-    inputs, outputs, labels = prepare_training_data(data)
-    logger.info("Labels: {}".format(labels))
-    logger.info("Training Model")
-    train(inputs, outputs, labels)
-    logger.info("Training Complete")
+    def execute(self, data):
+        self.logger.info("Preparing Data")
+        inputs, outputs, labels = prepare_training_data(data)
+
+        self.logger.info("Labels: {}".format(labels))
+        
+        self.logger.info("Training Model")
+        train(inputs, outputs, labels)
+        
+        self.logger.info("Training Complete")

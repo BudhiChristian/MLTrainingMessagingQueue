@@ -2,3 +2,9 @@ messagingConfiguration:
   host: localhost
   connectionTimeout: 3600
   heartbeat: 3600
+  queueName: crf_training_queue
+trainingConfiguration:
+  dataPreparation:
+    sentenceIndex: 0
+    wordIndex: 1
+    tagIndex: 3

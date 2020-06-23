@@ -1,36 +1,17 @@
-import pika
 import yaml
 import logging
 import logging.config
 
 from training_module.main import train_data
+from messaging_module import Messenger
+
+with open('./config.yml', 'r') as config_file:
+    config = yaml.load(config_file, Loader=yaml.FullLoader)
 
 with open('./logging/log.config.yml', 'r') as log_config_file:
     log_config = yaml.load(log_config_file, Loader=yaml.FullLoader)
     logging.config.dictConfig(log_config)
 logger = logging.getLogger(__name__)
 
-connection_params = pika.ConnectionParameters(
-    host='localhost',
-    blocked_connection_timeout=3600,
-    heartbeat=3600
-)
-
-with pika.BlockingConnection( connection_params ) as connection:
-    channel = connection.channel()
-
-    channel.queue_declare(queue='crf_training_queue', durable=True)
-    logger.info('Waiting for messages. To exit press CTRL+C')
-
-    def listenerCallback(ch, method, props, body):
-        logger.info("Received message")
-        
-        train_data(body.decode())
-        
-        ch.basic_ack(delivery_tag=method.delivery_tag)
-        logger.info("Acknowledged Message")
-
-    channel.basic_qos(prefetch_count=1)
-    channel.basic_consume(queue='crf_training_queue', on_message_callback=listenerCallback)
-
-    channel.start_consuming()
+messenger = Messenger(config['messagingConfiguration'])
+messenger.start(train_data)

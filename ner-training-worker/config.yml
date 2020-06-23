@@ -1,0 +1,4 @@
+messagingConfiguration:
+  host: localhost
+  connectionTimeout: 3600
+  heartbeat: 3600

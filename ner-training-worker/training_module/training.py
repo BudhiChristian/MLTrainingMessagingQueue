@@ -1,29 +1,30 @@
 import logging
 from sklearn_crfsuite import CRF, metrics
 
-logger = logging.getLogger(__name__)
 
-def train(inputs, outputs, labels):
-    logging.info("building model")
-    model = CRF(
-        algorithm='lbfgs',
-        c1=0.1,
-        c2=0.2,
-        max_iterations=100,
-        all_possible_transitions=True,
-        verbose=True
-    )
-    logging.info("fitting model")
-    model.fit(inputs, outputs)
+class ModelTraining():
+    def __init__(self, config):
+        self.model_dict = config['modelDict']
+        self.logger = logging.getLogger(__name__)
 
-    logging.info("validating model")
-    labels.remove('O')
-    y_pred = model.predict(inputs)
-    flat_f1_score = metrics.flat_f1_score(outputs, y_pred, average='weighted', labels=labels)
-    logger.info('flat f1 score: {}'.format(flat_f1_score))
-    validation = metrics.flat_classification_report(
-        outputs, y_pred, labels=labels, digits=4
-    )
-    logger.info('\n'+validation)
-    # TODO model save
+    def execute(self, inputs, outputs, labels):
+        self.logger.info("building model")
+        model = CRF( **self.model_dict )
+
+        self.logger.info("fitting model")
+        model.fit(inputs, outputs)
+
+        self.logger.info("validating model")
+        labels.remove('O')
+        y_pred = model.predict(inputs)
+        
+        flat_f1_score = metrics.flat_f1_score(outputs, y_pred, average='weighted', labels=labels)
+        self.logger.info('flat f1 score: {}'.format(flat_f1_score))
+        
+        validation = metrics.flat_classification_report(
+            outputs, y_pred, labels=labels, digits=4
+        )
+        self.logger.info('\n'+validation)
+
+        # TODO model save
     

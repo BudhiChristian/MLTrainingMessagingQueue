@@ -8,3 +8,11 @@ trainingConfiguration:
     sentenceIndex: 0
     wordIndex: 1
     tagIndex: 3
+  trainingDetails:
+    modelDict:
+      algorithm: lbfgs
+      c1: 0.1
+      c2: 0.2
+      max_iterations: 100
+      all_possible_transitions: true
+      verbose: true

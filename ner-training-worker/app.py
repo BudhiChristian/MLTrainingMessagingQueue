@@ -13,7 +13,7 @@ with open('./logging/log.config.yml', 'r') as log_config_file:
     logging.config.dictConfig(log_config)
 logger = logging.getLogger(__name__)
 
-training_job = TrainingJob(config['trainingConfiguration'])
 messenger = Messenger(config['messagingConfiguration'])
+training_job = TrainingJob(config['trainingConfiguration'])
 
 messenger.start(callback=training_job.execute)

@@ -1,16 +1,22 @@
+from os import environ
 import pika
 import logging
 
 class Messenger():
     def __init__(self, config):
         self.logger = logging.getLogger(__name__)
+        
+        # Check environment for host
+        env_host = environ.get('RABBITMQ_HOST')
+        self.logger.info("RABBITMQ_HOST={}".format(env_host))
 
         # Setup up connection params using config
         self.connection_params = pika.ConnectionParameters(
-            host=config['host'],
+            host=config['host'] if env_host is None else env_host, # if there is no host env variable  use config file
             blocked_connection_timeout=config['connectionTimeout'],
             heartbeat=config['heartbeat']
         )
+        self.logger.info(self.connection_params.host)
         self.queue_name = config['queueName']
 
     def start(self, callback=None):

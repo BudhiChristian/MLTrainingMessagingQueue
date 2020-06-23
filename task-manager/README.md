@@ -1,4 +1,4 @@
-Training Task Manager can be built and run on docker.
+Training Task Manager can build built and run on docker after RabbitMQ is running. Replace \<rabbitmq-host-location\> with RabbitMQ host. 
 
 ```
 docker build -t cjbudhi/training-queue/task-manager .

@@ -1,6 +1,6 @@
 # NER CRF Training Worker
 
-**NOTE - This application wont run unless a messaging queue is running and identified (see run options below)**
+**NOTE - This application won't run unless a messaging queue is running and identified (see run options below)**
 
 This application is meant to run as a worker node that listens to the messaging queue, crf_training_queue, and executes a training job when it is free. It is also meant to demonstrate a modular approach to building workers. 
 

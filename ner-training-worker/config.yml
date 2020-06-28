@@ -9,6 +9,7 @@ trainingConfiguration:
     wordIndex: 1
     tagIndex: 3
   trainingDetails:
+    outputFile: /external_mount/ner_model.pickle
     modelDict:
       algorithm: lbfgs
       c1: 0.1

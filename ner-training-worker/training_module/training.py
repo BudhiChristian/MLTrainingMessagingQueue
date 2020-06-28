@@ -1,9 +1,11 @@
 import logging
+import pickle
 from sklearn_crfsuite import CRF, metrics
 
 
 class ModelTraining():
     def __init__(self, config):
+        self.output_file = config['outputFile']
         self.model_dict = config['modelDict']
         self.logger = logging.getLogger(__name__)
 
@@ -27,4 +29,7 @@ class ModelTraining():
         self.logger.info('\n'+validation)
 
         # TODO model save
+        self.logger.info("saving model")
+        with open(self.output_file, 'wb') as pickle_file:
+            pickle.dump(model, pickle_file)
     

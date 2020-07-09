@@ -6,7 +6,7 @@ var app = express();
 const host = environment.runConfigurations.host;
 const port = environment.runConfigurations.port;
 
-app.use('/crf-ner', require('./models/crf-training'));
+app.use('/crf-ner', require('./routes/crf-training'));
 
 app.get('/env', (req, res) => {
     res.status(200).send(environment)

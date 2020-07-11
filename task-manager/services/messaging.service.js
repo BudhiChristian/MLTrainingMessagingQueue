@@ -1,35 +1,51 @@
 var environment = require('../environments/environment')
-var amqp = require('amqplib/callback_api')
+var amqp = require('amqplib')
 
-console.log("connecting to rabbitmq")
-var channel = null;
-console.log(environment.messagingConfigurations.messagingUrl)
-amqp.connect(environment.messagingConfigurations.messagingUrl, (err, connection) => {
-    if(err) {
-        throw err;
-    }
-    connection.createChannel((err, ch) => {
-        if (err) {
-            throw err;
+class MQConnection {
+    static async getChannel() {
+        if (!MQConnection.channel) {
+            console.log("connecting to rabbitmq")
+            console.log(environment.messagingConfigurations.messagingUrl)
+            try {
+                MQConnection.connection = await amqp.connect(environment.messagingConfigurations.messagingUrl)
+                MQConnection.channel = await MQConnection.connection.createChannel();
+                console.log("rabbitmq channel established")
+            } catch (err) {
+                console.error(err)
+                MQConnection.close()
+                console.error("rabbitmq collection failed")
+            }
         }
-        channel = ch;
-        console.log("rabbitmq channel established")
-    })
-});
+        return MQConnection.channel
+    }
+
+    static close() {
+        if (MQConnection.channel) {
+            MQConnection.channel.close()
+            MQConnection.channel = null;
+        }
+        if (MQConnection.connection) {
+            MQConnection.connection.close()
+            MQConnection.connection = null
+        }
+    }
+}
 
 process.on('exit', (code) => {
-    channel.close();
+    MQConnection.close()
     console.log("rabbitmq channel closing")
 })
 
 const publishToQueue = async (queueName, data) => {
+    let channel = await MQConnection.getChannel()
     if (!channel) {
         return "rabbitmq connection not establish. try again."
     }
 
-    channel.assertQueue(queueName, {
+    await channel.assertQueue(queueName, {
         durable: true
     })
+    
     channel.sendToQueue(queueName, data, {
         persistent: true
     })

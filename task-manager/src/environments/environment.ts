@@ -1,4 +1,4 @@
-const environment = {
+export const environment = {
     runConfigurations: {
         host: '0.0.0.0',
         port: 3000
@@ -8,5 +8,3 @@ const environment = {
         crfTrainingQueue: "crf_training_queue"
     }
 };
-
-module.exports = environment;

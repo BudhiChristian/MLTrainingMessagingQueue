@@ -1,7 +1,9 @@
-var environment = require('../environments/environment');
-var { MQConnection } = require('../services/messaging.service')
 
-var scheduleTraining = async (req, res) => {
+import { environment } from "../../environments/environment";
+import { MQConnection } from "../../../dist/app/services/messaging.service";
+
+
+export const scheduleTraining = async (req, res) => {
     try {
         let message = await MQConnection.publishDirectlyToQueue(
             environment.messagingConfigurations.crfTrainingQueue, 
@@ -17,5 +19,3 @@ var scheduleTraining = async (req, res) => {
         });
     }
 }
-
-module.exports = { scheduleTraining }

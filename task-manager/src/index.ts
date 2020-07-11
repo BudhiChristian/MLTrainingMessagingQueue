@@ -1,12 +1,12 @@
-var environment = require('./environments/environment')
+import express from 'express';
 
-var express = require('express');
-var app = express();
+import { environment } from './environments/environment'
 
+const app = express();
 const host = environment.runConfigurations.host;
 const port = environment.runConfigurations.port;
 
-app.use('/crf-ner', require('./routes/crf-training'));
+app.use('/crf-ner', require('./app/routes/crf-training.route'));
 
 app.get('/env', (req, res) => {
     res.status(200).send(environment)

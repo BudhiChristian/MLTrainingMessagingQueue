@@ -1,9 +1,9 @@
 var environment = require('../environments/environment');
-var { publishToQueue } = require('../services/messaging.service')
+var { MQConnection } = require('../services/messaging.service')
 
 var scheduleTraining = async (req, res) => {
     try {
-        let message = await publishToQueue(
+        let message = await MQConnection.publishDirectlyToQueue(
             environment.messagingConfigurations.crfTrainingQueue, 
             req.file.buffer
         )

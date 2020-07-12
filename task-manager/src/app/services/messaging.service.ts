@@ -16,7 +16,7 @@ export class MQConnection {
                 MQConnection.__channel = await MQConnection.__connection.createChannel();
                 console.log("rabbitmq channel established");
             } catch (err) {
-                console.error(err);
+                console.error(err.message);
                 MQConnection.close();
                 console.error("rabbitmq collection failed");
             }
@@ -27,7 +27,7 @@ export class MQConnection {
     static async publishDirectlyToQueue(queueName: string, data: Buffer): Promise<string> {
         let channel: Channel = await MQConnection.getChannel();
         if (!channel) {
-            return "rabbitmq connection not establish. try again.";
+            return "rabbitmq connection not established. try again.";
         }
 
         await channel.assertQueue(queueName, {
@@ -59,22 +59,3 @@ process.on('exit', (code) => {
     MQConnection.close()
     console.log("rabbitmq channel closing")
 })
-
-function log(name) {
-    return function decorator(t, n, descriptor) {
-        const orig = descriptor.value;
-        if (typeof orig === 'function') {
-            descriptor.value = function (...args) {
-                console.log({ name, function: n })
-                try {
-                    const result = orig.apply(this, args);
-                    return result;
-                } catch (e) {
-                    console.log(`Error: ${e}`);
-                    throw e;
-                }
-            }
-        }
-        return descriptor;
-    }
-}

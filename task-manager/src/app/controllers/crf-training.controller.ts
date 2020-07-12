@@ -1,6 +1,6 @@
 
 import { environment } from "../../environments/environment";
-import { MQConnection } from "../../../dist/app/services/messaging.service";
+import { MQConnection } from "../services/messaging.service";
 import { Response, Request } from "express";
 import { ExecutionTimeLogger } from "../services/logging.service";
 

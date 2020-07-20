@@ -8,6 +8,10 @@ Before running any of the applications in this project you must run a messaging 
 docker run -itd --rm --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:3-management
 ```
 
+## Planned Architecture
+
+![task Manager](https://christian-budhi-hosting.s3.amazonaws.com/training-manager/trainging_manager_architecture.jpg)
+
 ## Task Manager
 
 The Task Manager is a simple Express server that will post messages to specific queues to schedule a training job for the workers to execute. Currently an endpoint, crf-ner/train, exists which accepts a [csv file](https://www.kaggle.com/abhinavwalia95/entity-annotated-corpus?select=ner_dataset.csv) to be processed and used for training an NER model.

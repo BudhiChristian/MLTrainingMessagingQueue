@@ -3,6 +3,9 @@ messagingConfiguration:
   connectionTimeout: 3600
   heartbeat: 3600
   queueName: crf_training_queue
+  exchangeName: training_exchange
+  exchangeRoutingKeys:
+    - ner.crf
 trainingConfiguration:
   dataPreparation:
     sentenceIndex: 0

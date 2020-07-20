@@ -43,30 +43,13 @@ export class MQConnection {
         return MQConnection.__channel
     }
 
-    static async publish(key: string, data: Buffer): Promise<string> {
+    static async publish(routingKey: string, data: Buffer): Promise<string> {
         let channel: Channel = await MQConnection.getChannel();
         if (!channel) {
             return "rabbitmq connection not established. try again.";
         }
 
-        channel.publish(MQConnection.__exchangeName, key, data);
-
-        return "successfully queued"
-    }
-
-    static async publishDirectlyToQueue(queueName: string, data: Buffer): Promise<string> {
-        let channel: Channel = await MQConnection.getChannel();
-        if (!channel) {
-            return "rabbitmq connection not established. try again.";
-        }
-
-        await channel.assertQueue(queueName, {
-            durable: true
-        });
-
-        channel.sendToQueue(queueName, data, {
-            persistent: true
-        });
+        channel.publish(MQConnection.__exchangeName, routingKey, data);
 
         return "successfully queued"
     }

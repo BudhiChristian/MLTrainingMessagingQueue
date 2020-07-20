@@ -18,15 +18,24 @@ class Messenger():
         )
         self.logger.info(self.connection_params.host)
         self.queue_name = config['queueName']
+        self.exchange_name = config['exchangeName']
+        self.exchange_routing_keys = config['exchangeRoutingKeys']
 
     def start(self, callback=None):
         with pika.BlockingConnection( self.connection_params ) as connection:
             # Connection to a channel
             channel = connection.channel()
 
+            # Ensuring exchange exisits
+            channel.exchange_declare(exchange=self.exchange_name exchange_type='topic', durable=True)
+
             # Ensuring queue exists
             channel.queue_declare(queue=self.queue_name, durable=True)
-            
+
+            # Binding queue to exchange
+            for key in self.exchange_routing_keys:
+                channel.queue_bind(exchange=self.exchange_name, queue=self.queue_name, routing_key=key)
+
             # Only allow one fetch at a time time to distribute job where available
             channel.basic_qos(prefetch_count=1)
             

@@ -13,6 +13,8 @@ trainingConfiguration:
     tagIndex: 3
   trainingDetails:
     outputFile: /external_mount/ner_model.pickle
+    bucket: cbudhi-ml-models
+    objectRef: ner/crf/model.pickle
     modelDict:
       algorithm: lbfgs
       c1: 0.1

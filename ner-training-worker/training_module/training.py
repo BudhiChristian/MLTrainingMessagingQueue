@@ -28,8 +28,5 @@ class ModelTraining():
         )
         self.logger.info('\n'+validation)
 
-        # TODO model save
-        self.logger.info("saving model")
-        with open(self.output_file, 'wb') as pickle_file:
-            pickle.dump(model, pickle_file)
+        return model
     

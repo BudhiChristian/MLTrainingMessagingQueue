@@ -1,5 +1,6 @@
 from .preparation import DataPreparation
 from .training import ModelTraining
+from .persistence import ModelPersistence
 
 import logging
 
@@ -9,6 +10,7 @@ class TrainingJob():
         
         self.preparation_step = DataPreparation(config['dataPreparation'])
         self.training_step = ModelTraining(config['trainingDetails'])
+        self.persistence_step = ModelPersistence(config['trainingDetails'])
 
     def execute(self, data):
         self.logger.info("Preparing Data")
@@ -17,6 +19,9 @@ class TrainingJob():
         self.logger.info("Labels: {}".format(labels))
         
         self.logger.info("Training Model")
-        self.training_step.execute(inputs, outputs, labels)
+        model = self.training_step.execute(inputs, outputs, labels)
+
+        self.logger.info("Saving Model")
+        self.persistence_step.save(model)
         
         self.logger.info("Training Complete")
